@@ -5,8 +5,7 @@
  */
 package book.entities;
 
-import java.time.LocalDate;
-
+import java.sql.Date;
 /**
  *
  * @author Admin
@@ -18,12 +17,12 @@ public class Book {
     private String publishing;
     private int year;
     private float price;
-    private LocalDate dateType;
+    private Date dateType;
 
     public Book() {
     }
 
-    public Book(String id, String title, String author, String publishing, int year, float price, LocalDate dateType) {
+    public Book(String id, String title, String author, String publishing, int year, float price, Date dateType) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -81,11 +80,11 @@ public class Book {
         this.price = price;
     }
 
-    public LocalDate getDateType() {
+    public Date getDateType() {
         return dateType;
     }
 
-    public void setDateType(LocalDate dateType) {
+    public void setDateType(Date dateType) {
         this.dateType = dateType;
     }
 

@@ -5,19 +5,57 @@
  */
 package book.info;
 
+import book.ann.ThongBao;
+import book.ann.TimKiem;
+import book.dao.BookDAO;
+import book.entities.Book;
+import java.util.List;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Admin
  */
-public class BookJFrame extends javax.swing.JFrame {
-
+public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSearch, ThongBao.CallbackDelete {
+    private BookDAO bookDAO = new BookDAO();
     /**
      * Creates new form BookJFrame
      */
     public BookJFrame() {
         initComponents();
+        loadBooks();
     }
-
+    
+    public void loadBooks(){
+        List<Book> data = bookDAO.listBook(); 
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tblBook.getModel();
+        defaultTableModel.setRowCount(0);
+        for (Book book : data) {
+            defaultTableModel.addRow(new Object[]{book.getId(), book.getTitle(), book.getAuthor(),
+                book.getPublishing(), book.getYear(), book.getPrice(), book.getDateType()});
+        }
+        tblBook.setModel(defaultTableModel);
+        
+        tblBook.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int indexR = tblBook.getSelectedRow();
+                if (indexR >=0) {
+                String s = (String) tblBook.getValueAt(tblBook.getSelectedRow(), 0);
+                    Book book1 = bookDAO.findById(s);
+                    jTxtId.setText(book1.getId());
+                    jTxtTitle.setText(book1.getTitle());
+                    jTxtAuthor.setText(book1.getAuthor());
+                    jTxtPuslishing.setText(book1.getPublishing());
+                    jTxtYear.setText(String.valueOf(book1.getYear()));
+                    jTxtPrice.setText(String.valueOf(book1.getPrice()));
+                    jDateChooser1.setDate(book1.getDateType());
+                }
+            }
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -35,7 +73,7 @@ public class BookJFrame extends javax.swing.JFrame {
         jBtnEdit = new javax.swing.JButton();
         jBtnDel = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTblBooks = new javax.swing.JTable();
+        tblBook = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jTxtAuthor = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -53,6 +91,7 @@ public class BookJFrame extends javax.swing.JFrame {
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Quản Lý Thư Viện");
 
         jBtnLoadList.setText("Tai danh sach");
         jBtnLoadList.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +156,7 @@ public class BookJFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTblBooks.setModel(new javax.swing.table.DefaultTableModel(
+        tblBook.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -128,7 +167,12 @@ public class BookJFrame extends javax.swing.JFrame {
                 "Ma ", "Tieu De", "Tac gia", "Nha xuat ban", "Nam", "Gia", "Ngay nhap"
             }
         ));
-        jScrollPane1.setViewportView(jTblBooks);
+        tblBook.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tblBookMouseMoved(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblBook);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Dang Ky Sach"));
 
@@ -328,8 +372,14 @@ public class BookJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnEditActionPerformed
 
     private void jBtnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDelActionPerformed
-        // TODO add your handling code here:
+        ThongBao tb = new ThongBao(this, true, this);
+        tb.setTitle(jTxtId.getText(), jTxtTitle.getText());
+        tb.setVisible(true);
     }//GEN-LAST:event_jBtnDelActionPerformed
+
+    private void tblBookMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBookMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblBookMouseMoved
 
     /**
      * @param args the command line arguments
@@ -366,6 +416,17 @@ public class BookJFrame extends javax.swing.JFrame {
         });
     }
 
+    @Override
+    public void doAction(String bookName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void doDelete(String id) {
+        bookDAO.removeBook(id);
+        loadBooks();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAdd;
     private javax.swing.JButton jBtnDel;
@@ -384,12 +445,12 @@ public class BookJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTblBooks;
     private javax.swing.JTextField jTxtAuthor;
     private javax.swing.JTextField jTxtId;
     private javax.swing.JTextField jTxtPrice;
     private javax.swing.JTextField jTxtPuslishing;
     private javax.swing.JTextField jTxtTitle;
     private javax.swing.JTextField jTxtYear;
+    private javax.swing.JTable tblBook;
     // End of variables declaration//GEN-END:variables
 }
