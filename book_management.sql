@@ -45,6 +45,15 @@ END
 
 GO 
 
+CREATE PROC FindByTitle
+@title NVARCHAR(50)
+AS
+BEGIN
+	SELECT * FROM tblBook WHERE title LIKE '%'+@title+'%'
+END
+
+GO 
+
 CREATE PROC UpdateBook
 	@id VARCHAR(50),
 	@title NVARCHAR(255),
@@ -68,6 +77,21 @@ END
 
 GO
 
+CREATE PROC AddBook
+	@id VARCHAR(50),
+	@title NVARCHAR(255),
+	@author NVARCHAR(255),
+	@publishing NVARCHAR(255),
+	@year INT,
+	@price FLOAT,
+	@dateType DATE
+AS
+BEGIN 
+	INSERT INTO tblBook VALUES (@ID, @title, @author, @publishing, @year, @price, @dateType)
+END
+
+GO
+
 CREATE PROC RemoveBook
 @id VARCHAR(50)
 AS
@@ -76,4 +100,3 @@ BEGIN
 END
 
 GO
-	

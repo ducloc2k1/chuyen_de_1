@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Hai Phuong
  */
-public class BookDAO implements IBookDAO{
+public class BookDAO implements IBookDAO {
 
     @Override
     public List<Book> listBook() {
@@ -49,8 +49,10 @@ public class BookDAO implements IBookDAO{
     }
 
     @Override
-    public void addBook(Book book) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int addBook(Book book) {
+        return SqlConnection.executeUpdate("{call AddBook(?,?,?,?,?,?,?)}",
+                book.getId(), book.getTitle(), book.getAuthor(), book.getPublishing(),
+                book.getYear(), book.getPrice(), book.getDateType());
     }
 
     @Override
@@ -58,9 +60,9 @@ public class BookDAO implements IBookDAO{
         ResultSet rs = SqlConnection.executeQuery("{call findById(?)}", id);
         try {
             rs.next();
-            Book book = new Book(rs.getString("id"), rs.getString("title"), rs.getString("author"), 
-                                rs.getString("publishing"), rs.getInt("year"), rs.getFloat("price"), 
-                                rs.getDate("dateType"));
+            Book book = new Book(rs.getString("id"), rs.getString("title"), rs.getString("author"),
+                    rs.getString("publishing"), rs.getInt("year"), rs.getFloat("price"),
+                    rs.getDate("dateType"));
             return book;
         } catch (SQLException ex) {
             Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,16 +72,44 @@ public class BookDAO implements IBookDAO{
 
     @Override
     public void updateBook(Book book) {
-        SqlConnection.executeUpdate("{call UpdateBook(?,?,?,?,?,?,?)}", 
+        SqlConnection.executeUpdate("{call UpdateBook(?,?,?,?,?,?,?)}",
                 book.getId(), book.getTitle(), book.getAuthor(), book.getPublishing(),
-                book.getYear(), book.getPrice(),book.getDateType());
+                book.getYear(), book.getPrice(), book.getDateType());
     }
 
     @Override
     public void removeBook(String id) {
         SqlConnection.executeUpdate("{call RemoveBook(?)}", id);
     }
-    
+
+    @Override
+    public List<Book> findByTitle(String title) {
+        ResultSet resultSet = SqlConnection.executeQuery("{call FindByTitle(?)}", title);
+        Book book;
+        List<Book> books = new ArrayList<>();
+        if (resultSet != null) {
+            try {
+                while (resultSet.next()) {
+                    book = new Book();
+                    book.setId(resultSet.getString("id"));
+                    book.setTitle(resultSet.getString("title"));
+                    book.setAuthor(resultSet.getString("author"));
+                    book.setPublishing(resultSet.getString("publishing"));
+                    book.setYear(resultSet.getInt("year"));
+                    book.setPrice(resultSet.getFloat("price"));
+                    book.setDateType(resultSet.getDate("dateType"));
+                    books.add(book);
+                }
+                return books;
+            } catch (SQLException ex) {
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            System.out.println("Không có bản ghi");
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         BookDAO bookDAO = new BookDAO();
         bookDAO.listBook();

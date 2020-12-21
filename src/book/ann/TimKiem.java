@@ -11,10 +11,9 @@ package book.ann;
  */
 public class TimKiem extends javax.swing.JDialog {
     public CallbackSearch cb;
-    String id;
     
     public interface CallbackSearch{
-        public void doAction(String bookName);
+        public void doAction(String bookTtile);
     }
     /**
      * Creates new form NewJDialog
@@ -35,16 +34,13 @@ public class TimKiem extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         txtName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tìm kiếm");
 
-        jLabel1.setText("Bạn muốn xóa");
-
-        jButton1.setText("Đồng ý");
+        jButton1.setText("Tìm Kiếm");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -65,21 +61,16 @@ public class TimKiem extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 193, Short.MAX_VALUE)
                         .addComponent(jButton1))
-                    .addComponent(txtName)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 188, Short.MAX_VALUE)))
+                    .addComponent(txtName))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addGap(24, 24, 24)
+                .addComponent(txtName)
                 .addGap(22, 22, 22)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -145,7 +136,6 @@ public class TimKiem extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }

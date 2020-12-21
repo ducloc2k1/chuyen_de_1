@@ -9,7 +9,9 @@ import book.ann.ThongBao;
 import book.ann.TimKiem;
 import book.dao.BookDAO;
 import book.entities.Book;
+import java.sql.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -25,16 +27,21 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
      */
     public BookJFrame() {
         initComponents();
-        loadBooks();
+        loadBooks(null);
     }
     
-    public void loadBooks(){
+    public void loadBooks(String bookTitle){
         List<Book> data = bookDAO.listBook(); 
+        if (bookTitle != null) {
+            data = bookDAO.findByTitle(bookTitle);
+        }
         DefaultTableModel defaultTableModel = (DefaultTableModel) tblBook.getModel();
-        defaultTableModel.setRowCount(0);
-        for (Book book : data) {
-            defaultTableModel.addRow(new Object[]{book.getId(), book.getTitle(), book.getAuthor(),
-                book.getPublishing(), book.getYear(), book.getPrice(), book.getDateType()});
+        if (data.size() > 0) {            
+            defaultTableModel.setRowCount(0);
+            for (Book book : data) {
+                defaultTableModel.addRow(new Object[]{book.getId(), book.getTitle(), book.getAuthor(),
+                    book.getPublishing(), book.getYear(), book.getPrice(), book.getDateType()});
+            }
         }
         tblBook.setModel(defaultTableModel);
         
@@ -55,6 +62,7 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
                 }
             }
         });
+        tblBook.changeSelection(0, 0, false, false);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -256,7 +264,7 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
                                 .addComponent(jLabel6)
                                 .addGap(210, 210, 210)
                                 .addComponent(jTxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -284,10 +292,10 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
                     .addComponent(jLabel5)
                     .addComponent(jTxtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -325,7 +333,7 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 300, Short.MAX_VALUE))
+                .addGap(0, 294, Short.MAX_VALUE))
         );
 
         pack();
@@ -357,14 +365,26 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
 
     private void jBtnLoadListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadListActionPerformed
         // TODO add your handling code here:
+        loadBooks(null);
     }//GEN-LAST:event_jBtnLoadListActionPerformed
 
     private void jBtnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSearchActionPerformed
         // TODO add your handling code here:
+        TimKiem timKiem = new TimKiem(this, true, this);
+        timKiem.setVisible(true);
     }//GEN-LAST:event_jBtnSearchActionPerformed
 
     private void jBtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddActionPerformed
         // TODO add your handling code here:
+        Book book = new Book(jTxtId.getText(), jTxtTitle.getText(), jTxtAuthor.getText(),
+                jTxtPuslishing.getText(), Integer.parseInt(jTxtYear.getText()),
+                Float.parseFloat(jTxtPrice.getText()), new Date(jDateChooser1.getDate().getTime()));
+        if (bookDAO.addBook(book) > 0) {
+            JOptionPane.showMessageDialog(rootPane, "Thêm mới thành công !!!");
+            loadBooks(null);
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Thêm mới thất bại !!!");
+        }
     }//GEN-LAST:event_jBtnAddActionPerformed
 
     private void jBtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditActionPerformed
@@ -417,14 +437,14 @@ public class BookJFrame extends javax.swing.JFrame implements TimKiem.CallbackSe
     }
 
     @Override
-    public void doAction(String bookName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void doAction(String bookTitle) {
+        loadBooks(bookTitle);
     }
 
     @Override
     public void doDelete(String id) {
         bookDAO.removeBook(id);
-        loadBooks();
+        loadBooks(null);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -14,8 +14,9 @@ import java.util.List;
  */
 public interface IBookDAO {
     public List<Book> listBook();
-    public void addBook(Book book);
+    public int addBook(Book book);
     public Book findById(String id);
     public void updateBook(Book book);
     public void removeBook(String id);
+    public List<Book> findByTitle(String title);
 }

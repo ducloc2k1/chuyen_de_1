@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Hai%20Phuong/Documents/NetBeansProjects/chuyen_de_1/src/book/info/BookJFrame.java</file>
-            <file>file:/C:/Users/Hai%20Phuong/Documents/NetBeansProjects/chuyen_de_1/src/book/ann/ThongBao.java</file>
+            <file>file:/C:/Users/DELL/Documents/NetBeansProjects/chuyen_de_1/src/book/dao/IBookDAO.java</file>
+            <file>file:/C:/Users/DELL/Documents/NetBeansProjects/chuyen_de_1/src/book/entities/Book.java</file>
+            <file>file:/C:/Users/DELL/Documents/NetBeansProjects/chuyen_de_1/src/book/info/BookJFrame.java</file>
+            <file>file:/C:/Users/DELL/Documents/NetBeansProjects/chuyen_de_1/src/book/dao/BookDAO.java</file>
+            <file>file:/C:/Users/DELL/Documents/NetBeansProjects/chuyen_de_1/src/book/ann/TimKiem.java</file>
         </group>
     </open-files>
 </project-private>
